@@ -1,0 +1,143 @@
+.entrance-countdown {
+  padding: 20px 0;
+}
+
+.entrance-countdown > strong,
+.countdown-card li strong {
+  display: block;
+  color: var(--gold);
+  font: 700 27px 'Noto Serif TC', serif;
+}
+
+.entrance-countdown h2 {
+  margin-top: 5px;
+}
+
+.entrance-countdown p,
+.countdown-card li p {
+  margin: 3px 0 0;
+  font-size: 13px;
+}
+
+.countdown-subheading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 0 9px;
+  border-top: 1px solid var(--line);
+  color: var(--ink);
+  font-size: 13px;
+}
+
+.countdown-subheading span {
+  color: var(--muted);
+}
+
+.countdown-card ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.countdown-card li {
+  padding: 13px 0;
+  border-top: 1px solid var(--line);
+}
+
+.countdown-card li .countdown-event-link {
+  display: block;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  text-decoration: none;
+}
+
+.countdown-event-link h2 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.countdown-event-link h2 span {
+  color: var(--gold);
+  font: 700 21px sans-serif;
+}
+
+.countdown-event-link:hover h2 {
+  color: var(--gold);
+}
+
+.countdown-card li strong {
+  font-size: 19px;
+}
+
+.countdown-card li h2 {
+  font-size: 16px;
+  margin: 3px 0;
+}
+
+.countdown-card .countdown-empty {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.countdown-card a {
+  margin-top: 6px;
+}
+
+.hero {
+  grid-template-columns: minmax(0, 1.15fr) minmax(420px, 1fr);
+  gap: 48px;
+  align-items: start;
+}
+
+.countdown-card {
+  padding: 32px;
+}
+
+.countdown-card li {
+  padding: 18px 0;
+}
+
+.countdown-card li a {
+  display: block;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.countdown-event-link h2 {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 18px;
+  margin: 6px 0;
+  line-height: 1.55;
+}
+
+.countdown-event-link h2 span {
+  flex: 0 0 auto;
+  color: var(--gold);
+  font-family: 'Noto Sans TC', sans-serif;
+}
+
+.countdown-event-link p {
+  line-height: 1.8;
+}
+
+.countdown-event-link:hover h2 {
+  color: var(--gold);
+}
+
+@media (max-width: 900px) {
+  .hero {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .countdown-card {
+    padding: 24px;
+  }
+}
