@@ -1,6 +1,6 @@
 import { events, updatedAt } from './data.js';
 
-const routes=[['/','首頁','⌂'],['/calendar','行事曆','📅']];
+const routes=[['/','首頁','⌂'],['/calendar','行事曆','📅'],['/book-covers','書套尺寸','▤']];
 const categoryGroups={
   '重要日程':['開學/放假','校園活動','校外教學','學習活動'],
   '學習與評量':['期中考','期末考','五年級學力測驗','英文拼字競試'],
@@ -66,11 +66,13 @@ function calendar(){
 
 }
 
+function bookCovers(){return head('115學年度','書套尺寸參考','依年級查看整理表，點選圖片可開啟原圖。')+`<section class="book-cover-grid">${[1,5,6].map(grade=>`<article class="book-cover-card"><h2>${{1:'一',5:'五',6:'六'}[grade]}年級</h2><a href="./assets/book-covers/grade-${grade}.png" target="_blank" rel="noopener"><img src="./assets/book-covers/grade-${grade}.png" alt="115學年${grade}年級書套尺寸參考表" loading="lazy"></a><div class="book-cover-actions"><a href="./assets/book-covers/grade-${grade}.png" target="_blank" rel="noopener">放大查看</a><a href="./assets/book-covers/grade-${grade}.png" download="115菁英班書套尺寸參考--G${grade}.png">下載原檔</a></div></article>`).join('')}</section>`;}
+
 function render(resetScroll=false){
   const previousScroll=window.scrollY;
   const raw=location.hash.slice(1)||'/';
   const path=routes.some(([p])=>p===raw)?raw:'/';
-  const pages={'/':home,'/calendar':calendar};
+  const pages={'/':home,'/calendar':calendar,'/book-covers':bookCovers};
   root.innerHTML=`<div class="site-shell"><header class="site-header"><a class="brand" href="#/"><b>◆</b><span>小鈴鐺小學資訊整合</span></a><button class="menu-button" aria-label="切換導覽">☰</button><nav aria-label="主要導覽">${routes.map(([p,l,i])=>`<a class="${path===p?'active':''}" href="#${p}"><b>${i}</b><span>${l}</span></a>`).join('')}</nav></header><main>${pages[path]()}</main><footer>本站為家長自行整理資訊，請以學校與導師最新公告為準。<span>最後更新：${updatedAt}</span></footer></div>`;
   document.querySelector('.menu-button').onclick=()=>document.querySelector('nav').classList.toggle('open');
   if(path==='/'){
