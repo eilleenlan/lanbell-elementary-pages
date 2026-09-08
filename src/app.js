@@ -6,7 +6,7 @@ const categoryGroups={
   '學習與評量':['期中考','期末考','五年級學力測驗','英文拼字競試'],
   '畢業班':['畢業旅行','直升考','畢業考','畢業典禮'],
   '家長參與':['親師座談','家長簽章'],
-  '行政與其他':['行政','健康檢查','新生入學','其他'],
+  '行政與其他':['註冊/繳費','行政','健康檢查','新生入學','其他'],
 };
 const groupFor=(category)=>Object.entries(categoryGroups).find(([,items])=>items.includes(category))?.[0]||'行政與其他';
 const placeFor=(category)=>category==='校外教學'?'校外':'校內';
