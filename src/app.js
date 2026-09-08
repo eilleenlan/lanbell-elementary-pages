@@ -2,10 +2,10 @@ import { events, updatedAt } from './data.js';
 
 const routes=[['/','首頁','⌂'],['/calendar','行事曆','📅'],['/book-covers','書套尺寸','▤']];
 const categoryGroups={
-  '重要日程':['開學/放假','校園活動','校外教學','學習活動'],
+  '重要日程':['開學/放假','校園活動','校外教學','學習活動','暑期活動'],
   '學習與評量':['期中考','期末考','五年級學力測驗','英文拼字競試'],
   '畢業班':['畢業旅行','直升考','畢業考','畢業典禮'],
-  '家長參與':['親師座談','家長活動'],
+  '家長參與':['親師座談','家長簽章'],
   '行政與其他':['行政','健康檢查','新生入學','其他'],
 };
 const groupFor=(category)=>Object.entries(categoryGroups).find(([,items])=>items.includes(category))?.[0]||'行政與其他';
