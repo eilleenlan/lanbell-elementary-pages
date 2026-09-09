@@ -1,4 +1,4 @@
-export const updatedAt = '2026年9月8日';
+export const updatedAt = '2026年9月9日';
 export const events = [
   {
     "id": "calendar-115-1-01",
@@ -1020,5 +1020,71 @@ export const events = [
     "source": "使用者提供的歷年下學期重要行程（2026-09-08）",
     "academicYear": 112,
     "semester": 2
+  },
+  {
+    "id": "morning-speech-115-1-1",
+    "start": "2026-09-16",
+    "title": "晨間演說①｜第一組（中文）",
+    "category": "學習活動",
+    "grades": [],
+    "note": "．一年級朗讀課文（不用背）。\n．二～六年級演說暑假作業（要背稿）。",
+    "source": "使用者整理的115學年第一學期晨間演說表",
+    "academicYear": 115,
+    "semester": 1
+  },
+  {
+    "id": "morning-speech-115-1-6",
+    "start": "2026-11-18",
+    "title": "晨間演說⑥｜第二組（英文）",
+    "category": "學習活動",
+    "grades": [],
+    "note": "．一年級朗讀課文（不用背）。\n．二～六年級演說暑假作業（要背稿）。",
+    "source": "使用者整理的115學年第一學期晨間演說表",
+    "academicYear": 115,
+    "semester": 1
+  },
+  {
+    "id": "morning-speech-115-1-4",
+    "start": "2026-10-14",
+    "title": "晨間演說④｜第三組（中文）",
+    "category": "學習活動",
+    "grades": [],
+    "note": "．一年級朗讀課文（不用背）。\n．二～六年級演說暑假作業（要背稿）。",
+    "source": "使用者整理的115學年第一學期晨間演說表",
+    "academicYear": 115,
+    "semester": 1
+  },
+  {
+    "id": "morning-speech-115-1-2",
+    "start": "2026-09-23",
+    "title": "晨間演說②｜第四組（英文）",
+    "category": "學習活動",
+    "grades": [],
+    "note": "．一年級朗讀課文（不用背）。\n．二～六年級演說暑假作業（要背稿）。",
+    "source": "使用者整理的115學年第一學期晨間演說表",
+    "academicYear": 115,
+    "semester": 1
+  },
+  {
+    "id": "morning-speech-115-1-5",
+    "start": "2026-10-21",
+    "title": "晨間演說⑤｜第五組（英文）",
+    "category": "學習活動",
+    "grades": [],
+    "note": "．一年級朗讀課文（不用背）。\n．二～六年級演說暑假作業（要背稿）。",
+    "source": "使用者整理的115學年第一學期晨間演說表",
+    "academicYear": 115,
+    "semester": 1
+  },
+  {
+    "id": "morning-speech-115-1-3",
+    "start": "2026-09-30",
+    "title": "晨間演說③｜第六組（中文）",
+    "category": "學習活動",
+    "grades": [],
+    "note": "．一年級朗讀課文（不用背）。\n．二～六年級演說暑假作業（要背稿）。",
+    "source": "使用者整理的115學年第一學期晨間演說表",
+    "academicYear": 115,
+    "semester": 1
   }
 ];

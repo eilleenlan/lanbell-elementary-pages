@@ -14,3 +14,5 @@
 .event-details tr.new-exam-day>td{border-top:3px solid var(--ink)}
 .timeline article.focused-event{position:relative;z-index:1;outline:3px solid var(--gold);outline-offset:-3px;background:#fff8d6;animation:focus-event 1.6s ease both}@keyframes focus-event{0%,100%{box-shadow:none}35%{box-shadow:0 0 0 8px rgba(255,210,63,.3)}}
 @media(max-width:600px){.event-details-body{padding:14px}.event-details th,.event-details td{padding:8px}.event-details table{font-size:12px}}
+
+.event-copy > p { white-space: pre-line; }
