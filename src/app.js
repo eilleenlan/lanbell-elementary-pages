@@ -45,9 +45,15 @@ const eventDetails=(event)=>{
   return `<details class="event-details"><summary>查看考程與範圍</summary><div class="event-details-body">${schedule}${reminders}</div></details>`;
 };
 
+const examCategories=new Set(['期中考','期末考','五年級學力測驗','英文拼字競試','直升考','畢業考']);
+function examCountdown(){
+ const exams=events.filter(event=>examCategories.has(event.category)&&!isPast(event)&&daysUntil(event.start)<=14).sort((a,b)=>a.start.localeCompare(b.start));
+ return '<section class="exam-countdown countdown-card" aria-labelledby="exam-countdown-title"><h2 id="exam-countdown-title">兩週內考試倒數</h2><p class="exam-countdown-intro">今天起 14 天內的考試，含正在進行的考試。</p>'+(exams.length?'<ul>'+exams.map(event=>'<li><a class="countdown-event-link" href="#/calendar" data-event-index="'+events.indexOf(event)+'"><strong>'+(daysUntil(event.start)<0?'進行中':countdownLabel(event.start))+'</strong><h3>'+escapeHtml(event.title)+'</h3><p>'+compactDate(event)+'</p><p>'+gradeText(event.grades)+(event.tentative?' · 暫定':'')+'</p></a></li>').join('')+'</ul>':'<p class="countdown-empty">依目前已整理的行程，兩週內沒有考試。</p>')+'</section>';
+}
+
 function home(){
  const upcoming=events.filter(x=>!isPast(x)).sort((a,b)=>a.start.localeCompare(b.start)).slice(0,3);
- return '<section class="hero"><div class="hero-copy"><span class="eyebrow">ELEMENTARY SCHOOL CALENDAR</span><h1>小學生活的重要日子，<br>一起好好記下來。</h1><p>一至六年級的學校活動、學習評量與親師日程。</p><div class="hero-actions"><a class="primary" href="#/calendar">📅 查看行事曆</a></div></div><aside class="today-card countdown-card"><span>◷ 近期重要日程</span><section class="entrance-countdown">'+(upcoming.length?upcoming.map(x=>'<h2>'+escapeHtml(x.title)+'</h2><p>'+compactDate(x)+'</p>').join(''):'<h2>目前沒有近期日程</h2><p>目前已整理的活動皆已結束，請至行事曆勾選「包含已過期」查看。</p>')+'</section><a href="#/calendar">查看行事曆 <b>›</b></a></aside></section><section class="status-band"><b>○</b><div><strong>115學年度第一學期行事曆</strong><span>'+(events.length?'已整理 '+events.length+' 項活動':'學校、學年度與正式日期待補，目前沒有正式行程。')+'</span></div></section>';
+ return '<section class="hero"><div class="hero-copy"><span class="eyebrow">ELEMENTARY SCHOOL CALENDAR</span><h1>小學生活的重要日子，<br>一起好好記下來。</h1><p>一至六年級的學校活動、學習評量與親師日程。</p><div class="hero-actions"><a class="primary" href="#/calendar">📅 查看行事曆</a></div></div><aside class="today-card countdown-card"><span>◷ 近期重要日程</span><section class="entrance-countdown">'+(upcoming.length?upcoming.map(x=>'<h2>'+escapeHtml(x.title)+'</h2><p>'+compactDate(x)+'</p>').join(''):'<h2>目前沒有近期日程</h2><p>目前已整理的活動皆已結束，請至行事曆勾選「包含已過期」查看。</p>')+'</section><a href="#/calendar">查看行事曆 <b>›</b></a></aside></section><section class="status-band"><b>○</b><div><strong>115學年度第一學期行事曆</strong><span>'+(events.length?'已整理 '+events.length+' 項活動':'學校、學年度與正式日期待補，目前沒有正式行程。')+'</span></div></section>'+examCountdown();
 }
 
 function calendar(){
@@ -84,7 +90,7 @@ function render(resetScroll=false){
     const homeSearchInput=document.querySelector('#home-search-input');
     homeSearchInput.value=state.query;
     homeSearch.onsubmit=(event)=>{event.preventDefault();state.query=homeSearchInput.value.trim();if(!state.query)return;state.includePast=true;location.hash='#/calendar'};
-    document.querySelectorAll('.countdown-event-link').forEach(link=>link.onclick=()=>{state.grade='all';state.place='all';state.groups=[];state.categories=[];state.query='';state.includePast=false;state.focusEvent=Number(link.dataset.eventIndex)});
+    document.querySelectorAll('.countdown-event-link').forEach(link=>link.onclick=()=>{state.academicYear='all';state.semester='all';state.grade='all';state.place='all';state.groups=[];state.categories=[];state.query='';state.includePast=false;state.focusEvent=Number(link.dataset.eventIndex)});
   }
   if(path==='/calendar'){
 
