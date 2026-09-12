@@ -15,3 +15,6 @@ nav a.active,nav a:hover{border-bottom-color:var(--sunflower);background:#e0f3ff
 a:focus-visible,button:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
 
 .book-cover-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;margin-top:28px}.book-cover-card{padding:18px;background:var(--surface);border:1px solid var(--line)}.book-cover-card h2{color:var(--ink);margin:0 0 16px}.book-cover-card img{display:block;width:100%;height:auto}.book-cover-actions{display:flex;flex-wrap:wrap;gap:18px;margin-top:20px;color:var(--ink);font-weight:700}.book-cover-actions a{padding:10px 0}@media(max-width:800px){.book-cover-grid{grid-template-columns:1fr}}
+
+.site-notice { padding: 16px 24px; text-align: center; color: var(--ink); background: #fff8d6; border-bottom: 1px solid var(--line); font-size: 14px; line-height: 1.8; }
+@media (max-width: 600px) { .site-notice { padding: 12px 20px; font-size: 13px; } }

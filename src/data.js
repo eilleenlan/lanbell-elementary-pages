@@ -1,4 +1,4 @@
-export const updatedAt = '2026年9月9日';
+export const updatedAt = '2026年9月12日';
 export const events = [
   {
     "id": "calendar-115-1-01",
@@ -86,10 +86,41 @@ export const events = [
     "title": "學校日（1–6 年級家長參加）",
     "category": "親師座談",
     "grades": [],
-    "note": "上午由各班導師主持。",
+    "note": "上午 08:40–11:40，邀請一至六年級家長參加。",
     "source": "學校115學年度第1學期學校簡曆表（表頭標記0618；使用者提供）",
     "academicYear": 115,
-    "semester": 1
+    "semester": 1,
+    "activitySchedule": [
+      {
+        "time": "08:40–08:50",
+        "activity": "喜相逢",
+        "place": "一年級學生家長：活動中心；其他年級學生家長：各班教室"
+      },
+      {
+        "time": "08:50–09:00",
+        "activity": "校長致詞",
+        "place": "一年級學生家長：活動中心；其他年級學生家長：各班教室"
+      },
+      {
+        "time": "09:00–10:00",
+        "activity": "親職教育講座",
+        "place": "一年級學生家長：活動中心；其他年級學生家長：各班教室"
+      },
+      {
+        "time": "10:00–11:30",
+        "activity": "班級經營、教育理念報告",
+        "place": "各班教室"
+      },
+      {
+        "time": "11:30–11:40",
+        "activity": "溫馨提醒、活動總結",
+        "place": "各班教室"
+      }
+    ],
+    "activityReminders": [
+      "當日校園不開放停車，建議搭乘大眾交通工具或使用校園鄰近停車空間。",
+      "請自備飲水，一同愛護地球。"
+    ]
   },
   {
     "id": "calendar-115-1-09",

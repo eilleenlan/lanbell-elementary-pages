@@ -38,6 +38,8 @@ const googleCalendarUrl=(event)=>{
   return `https://calendar.google.com/calendar/render?${params}`;
 };
 const eventDetails=(event)=>{
+  if(event.activitySchedule)return `<details class="event-details activity-details"><summary>查看細節</summary><div class="event-details-body"><section><h3>活動流程</h3><div class="exam-table-wrap"><table><thead><tr><th>時間</th><th>活動項目</th><th>地點</th></tr></thead><tbody>${event.activitySchedule.map(item=>`<tr><td>${escapeHtml(item.time)}</td><td>${escapeHtml(item.activity)}</td><td>${escapeHtml(item.place)}</td></tr>`).join('')}</tbody></table></div></section><section><h3>提醒事項</h3><ul>${(event.activityReminders||[]).map(item=>`<li>${escapeHtml(item)}</li>`).join('')}</ul></section></div></details>`;
+
   if(!event.schedule&&!event.examScope&&!event.reminders)return '';
   const scopeFor=(subject)=>event.examScope?.find(([name])=>subject.replace(/科|閱讀|聽力/g,'')===name.replace(/科/g,''))?.[1]||'—';
   const schedule=event.schedule?`<section><h3>考試時間與範圍</h3><div class="exam-table-wrap"><table><thead><tr><th>日期</th><th>時間</th><th>科目</th><th>測驗範圍</th></tr></thead><tbody>${event.schedule.map((item,index)=>`<tr class="${index>0&&item.date!==event.schedule[index-1].date?'new-exam-day':''}"><td>${item.date}</td><td>${item.time}</td><td>${item.subject}</td><td>${scopeFor(item.subject)}</td></tr>`).join('')}</tbody></table></div></section>`:'';
@@ -79,7 +81,7 @@ function render(resetScroll=false){
   const raw=location.hash.slice(1)||'/';
   const path=routes.some(([p])=>p===raw)?raw:'/';
   const pages={'/':home,'/calendar':calendar,'/book-covers':bookCovers};
-  root.innerHTML=`<div class="site-shell"><header class="site-header"><a class="brand" href="#/"><b>◆</b><span>小鈴鐺小學資訊整合</span></a><button class="menu-button" aria-label="切換導覽">☰</button><nav aria-label="主要導覽">${routes.map(([p,l,i])=>`<a class="${path===p?'active':''}" href="#${p}"><b>${i}</b><span>${l}</span></a>`).join('')}</nav></header><main>${pages[path]()}</main><footer>本站為家長自行整理資訊，請以學校與導師最新公告為準。<span>最後更新：${updatedAt}</span></footer></div>`;
+  root.innerHTML=`<div class="site-shell"><header class="site-header"><a class="brand" href="#/"><b>◆</b><span>小鈴鐺小學資訊整合</span></a><button class="menu-button" aria-label="切換導覽">☰</button><nav aria-label="主要導覽">${routes.map(([p,l,i])=>`<a class="${path===p?'active':''}" href="#${p}"><b>${i}</b><span>${l}</span></a>`).join('')}</nav></header><aside class="site-notice" aria-label="網站聲明">非官方網站，純屬家長交流參考，一切資訊以學校最新公告為準</aside><main>${pages[path]()}</main><footer>非官方網站，純屬家長交流參考，一切資訊以學校最新公告為準<span>最後更新：${updatedAt}</span></footer></div>`;
   document.querySelector('.menu-button').onclick=()=>document.querySelector('nav').classList.toggle('open');
   if(path==='/'){
     const actions=document.querySelector('.hero-actions');
