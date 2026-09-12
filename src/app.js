@@ -1,4 +1,4 @@
-import { events, updatedAt } from './data.js';
+import { events, updatedAt } from './data.js?v=20260912-event-links';
 
 const routes=[['/','首頁','⌂'],['/calendar','行事曆','📅'],['/book-covers','書套尺寸','▤']];
 const categoryGroups={
