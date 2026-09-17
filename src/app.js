@@ -1,4 +1,4 @@
-import { events, updatedAt } from './data.js?v=20260912-event-links';
+import { events, updatedAt } from './data.js?v=20260917-month-view';
 
 const routes=[['/','首頁','⌂'],['/calendar','行事曆','📅'],['/book-covers','書套尺寸','▤']];
 const categoryGroups={
@@ -10,7 +10,7 @@ const categoryGroups={
 };
 const groupFor=(category)=>Object.entries(categoryGroups).find(([,items])=>items.includes(category))?.[0]||'行政與其他';
 const placeFor=(category)=>category==='校外教學'?'校外':'校內';
-const state={academicYear:'all',semester:'all',grade:'all',place:'all',groups:[],categories:[],query:'',includePast:false,focusEvent:null};
+const state={view:'list',month:'all',academicYear:'all',semester:'all',grade:'all',place:'all',groups:[],categories:[],query:'',includePast:false,focusEvent:null};
 const root=document.querySelector('#root');
 const dateText=(event)=>{
   const weekdays='日一二三四五六';
@@ -58,7 +58,23 @@ function home(){
  return '<section class="hero"><div class="hero-copy"><span class="eyebrow">ELEMENTARY SCHOOL CALENDAR</span><h1>小學生活的重要日子，<br>一起好好記下來。</h1><p>一至六年級的學校活動、學習評量與親師日程。</p><div class="hero-actions"><a class="primary" href="#/calendar">📅 查看行事曆</a></div></div><aside class="today-card countdown-card"><span>◷ 近期重要日程</span><section class="entrance-countdown">'+(upcoming.length?upcoming.map(x=>'<a class="countdown-event-link upcoming-event-link" href="#/calendar" data-event-index="'+events.indexOf(x)+'"><h2>'+escapeHtml(x.title)+'<span aria-hidden="true">›</span></h2><p>'+compactDate(x)+'</p></a>').join(''):'<h2>目前沒有近期日程</h2><p>目前已整理的活動皆已結束，請至行事曆勾選「包含已過期」查看。</p>')+'</section><a href="#/calendar">查看行事曆 <b>›</b></a></aside></section><section class="status-band"><b>○</b><div><strong>115學年度第一學期行事曆</strong><span>'+(events.length?'已整理 '+events.length+' 項活動':'學校、學年度與正式日期待補，目前沒有正式行程。')+'</span></div></section>'+examCountdown();
 }
 
+
+const currentMonth=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')};
+const monthLabel=m=>m.replace('-', ' 年 ')+' 月';
+const inTerm=e=>(state.academicYear==='all'||e.academicYear===Number(state.academicYear))&&(state.semester==='all'||e.semester===Number(state.semester));
+const eventMonths=e=>{const result=[];let m=e.start.slice(0,7);const end=(e.end||e.start).slice(0,7);while(m<=end){result.push(m);m=shiftMonth(m,1);}return result};
+const shiftMonth=(m,n)=>{const d=new Date(m+'-01T00:00:00');d.setMonth(d.getMonth()+n);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')};
+const availableMonths=()=>[...new Set(events.filter(inTerm).flatMap(eventMonths))].sort();
+const matchesMonth=e=>state.month==='all'||eventMonths(e).includes(state.month);
+function monthGrid(items){
+ const first=localDate(state.month+'-01');const count=new Date(first.getFullYear(),first.getMonth()+1,0).getDate();const today=addDays(currentMonth()+'-01',new Date().getDate()-1);
+ let cells=Array.from({length:first.getDay()},()=>'<div class="month-blank"></div>');
+ for(let day=1;day<=count;day++){const date=state.month+'-'+String(day).padStart(2,'0');const dayEvents=items.filter(e=>e.start<=date&&(e.end||e.start)>=date);cells.push('<div class="month-day '+(date===today?'month-today':'')+'"><time datetime="'+date+'">'+day+'</time>'+dayEvents.map(e=>'<button type="button" class="month-event" data-calendar-event="'+events.indexOf(e)+'">'+escapeHtml(e.title)+(e.tentative?'（暫定）':'')+'</button>').join('')+'</div>');}
+ return '<div class="month-navigation"><button type="button" data-month-step="-1" aria-label="上個月">‹ 上個月</button><h2>'+monthLabel(state.month)+'</h2><button type="button" data-month-step="1" aria-label="下個月">下個月 ›</button></div><div class="month-scroll"><div class="month-grid">'+[...'日一二三四五六'].map(d=>'<div class="weekday">'+d+'</div>').join('')+cells.join('')+'</div></div>'+(items.length?'':'<p class="empty-state">本月沒有符合篩選條件的行程，可調整篩選或勾選「包含已過期」。</p>');
+}
+
 function calendar(){
+  if(state.view==='month'&&state.month==='all'){const months=availableMonths();state.month=months.includes(currentMonth())?currentMonth():(months[0]||currentMonth());}
   const categories=state.groups.length?[...new Set(state.groups.flatMap(group=>categoryGroups[group]))]:Object.values(categoryGroups).flat();
   const query=state.query.trim().toLocaleLowerCase('zh-Hant');
   const matchesQuery=(x)=>{
@@ -67,10 +83,10 @@ function calendar(){
     const haystack=[x.title,x.note||'',x.category,groupFor(x.category),placeFor(x.category),gradeText(x.grades),...dates].join(' ').toLocaleLowerCase('zh-Hant');
     return haystack.includes(query);
   };
-  const filtered=events.filter(x=>(state.academicYear==='all'||x.academicYear===Number(state.academicYear))&&(state.semester==='all'||x.semester===Number(state.semester))&&(state.includePast||!isPast(x))&&(state.grade==='all'||x.grades.length===0||x.grades.includes(Number(state.grade)))&&(state.place==='all'||placeFor(x.category)===state.place)&&(state.groups.length===0||state.groups.includes(groupFor(x.category)))&&(state.categories.length===0||state.categories.includes(x.category))&&matchesQuery(x)).slice().sort((a,b)=>a.start.localeCompare(b.start)||a.title.localeCompare(b.title,'zh-Hant'));
+  const filtered=events.filter(x=>(state.academicYear==='all'||x.academicYear===Number(state.academicYear))&&(state.semester==='all'||x.semester===Number(state.semester))&&(state.includePast||!isPast(x))&&(state.grade==='all'||x.grades.length===0||x.grades.includes(Number(state.grade)))&&(state.place==='all'||placeFor(x.category)===state.place)&&(state.groups.length===0||state.groups.includes(groupFor(x.category)))&&(state.categories.length===0||state.categories.includes(x.category))&&matchesQuery(x)&&matchesMonth(x)).slice().sort((a,b)=>a.start.localeCompare(b.start)||a.title.localeCompare(b.title,'zh-Hant'));
   return head(`${state.academicYear==='all'?'全部學年度':state.academicYear+'學年度'}・${state.semester==='all'?'全部學期':state.semester==='1'?'上學期':'下學期'}`,'小學活動行事曆','依年級、校內／校外、大分類與小分類快速篩選。標示「暫定」的日期仍須以最新公告為準。')+
-    `<section class="calendar-tools" aria-label="行事曆篩選"><div class="select-filters"><label>學年度<select id="academic-year-filter"><option value="all">全部學年度</option>${[...new Set(events.map(x=>x.academicYear))].sort((a,b)=>b-a).map(year=>`<option value="${year}">${year}學年度</option>`).join('')}</select></label><label>學期<select id="semester-filter"><option value="all">全部</option><option value="1">上學期</option><option value="2">下學期</option></select></label><label>適用年級<select id="grade-filter"><option value="all">全部年級</option><option value="1">一年級</option><option value="2">二年級</option><option value="3">三年級</option><option value="4">四年級</option><option value="5">五年級</option><option value="6">六年級</option></select></label><label>校內／校外<select id="place-filter"><option value="all">全部</option><option value="校內">校內</option><option value="校外">校外</option></select></label><label class="past-toggle"><input id="include-past" type="checkbox" ${state.includePast?'checked':''}><span>包含已過期</span></label><p>顯示 <strong>${filtered.length}</strong> 項</p></div><fieldset class="multi-filter"><legend>大分類（可複選；未選代表全部）</legend><div>${Object.keys(categoryGroups).map(x=>`<label><input type="checkbox" name="group-filter" value="${x}" ${state.groups.includes(x)?'checked':''}><span>${x}</span></label>`).join('')}</div></fieldset><fieldset class="multi-filter"><legend>小分類（可複選；未選代表全部）</legend><div>${categories.map(x=>`<label><input type="checkbox" name="category-filter" value="${x}" ${state.categories.includes(x)?'checked':''}><span>${x}</span></label>`).join('')}</div></fieldset></section>`+
-    `<section class="timeline">${filtered.map(x=>`<article id="event-${events.indexOf(x)}" class="${isPast(x)?'past-event ':''}${state.focusEvent===events.indexOf(x)?'focused-event':''}"><time>${dateText(x)}</time><div class="event-copy"><div class="event-tags"><span class="place-tag">${placeFor(x.category)}</span><span class="group-tag">${groupFor(x.category)}</span><span class="tag">${x.category}</span><span class="grade-tag">${gradeText(x.grades)}</span>${x.tentative?'<span class="tentative-tag">暫定</span>':''}${isPast(x)?'<span class="expired-tag">已結束</span>':''}</div><h2>${x.title}</h2>${x.note?`<p>${x.note}</p>`:''}${eventDetails(x)}<a class="google-calendar-link" href="${googleCalendarUrl(x)}" target="_blank" rel="noopener">＋ 加入 Google 日曆</a></div></article>`).join('')||`<p class="empty-state">${events.length?'目前沒有符合條件的活動。':'尚未加入正式活動，等待學校行事曆資料。'}</p>`}</section><p class="source-note">資料來源：學校115學年度第1學期學校簡曆表（表頭標記0618）。另含使用者提供的112至114學年度暑期活動與六年級畢業相關行程日期供備查。115學年度資料涵蓋2026年暑假至2027年2月11日第二學期開學；請以學校最新公告為準。</p>`;
+    `<div class="view-controls"><button type="button" data-view="list" aria-pressed="${state.view==='list'}">清單</button><button type="button" data-view="month" aria-pressed="${state.view==='month'}">月曆</button><button type="button" id="this-month">回到本月</button></div><section class="calendar-tools" aria-label="行事曆篩選"><div class="select-filters"><label>學年度<select id="academic-year-filter"><option value="all">全部學年度</option>${[...new Set(events.map(x=>x.academicYear))].sort((a,b)=>b-a).map(year=>`<option value="${year}">${year}學年度</option>`).join('')}</select></label><label>學期<select id="semester-filter"><option value="all">全部</option><option value="1">上學期</option><option value="2">下學期</option></select></label><label>月份<select id="month-filter">${state.view==='list'?'<option value="all">全部月份</option>':''}${[...new Set([...availableMonths(),...(state.month!=='all'?[state.month]:[])])].sort().map(m=>`<option value="${m}">${monthLabel(m)}</option>`).join('')}</select></label><label>適用年級<select id="grade-filter"><option value="all">全部年級</option><option value="1">一年級</option><option value="2">二年級</option><option value="3">三年級</option><option value="4">四年級</option><option value="5">五年級</option><option value="6">六年級</option></select></label><label>校內／校外<select id="place-filter"><option value="all">全部</option><option value="校內">校內</option><option value="校外">校外</option></select></label><label class="past-toggle"><input id="include-past" type="checkbox" ${state.includePast?'checked':''}><span>包含已過期</span></label><p>顯示 <strong>${filtered.length}</strong> 項</p></div><fieldset class="multi-filter"><legend>大分類（可複選；未選代表全部）</legend><div>${Object.keys(categoryGroups).map(x=>`<label><input type="checkbox" name="group-filter" value="${x}" ${state.groups.includes(x)?'checked':''}><span>${x}</span></label>`).join('')}</div></fieldset><fieldset class="multi-filter"><legend>小分類（可複選；未選代表全部）</legend><div>${categories.map(x=>`<label><input type="checkbox" name="category-filter" value="${x}" ${state.categories.includes(x)?'checked':''}><span>${x}</span></label>`).join('')}</div></fieldset></section>`+
+    `<section class="calendar-results">${state.view==='month'?monthGrid(filtered):''}<section class="timeline" ${state.view==='month'?'hidden':''}>${filtered.map(x=>`<article id="event-${events.indexOf(x)}" class="${isPast(x)?'past-event ':''}${state.focusEvent===events.indexOf(x)?'focused-event':''}"><time>${dateText(x)}</time><div class="event-copy"><div class="event-tags"><span class="place-tag">${placeFor(x.category)}</span><span class="group-tag">${groupFor(x.category)}</span><span class="tag">${x.category}</span><span class="grade-tag">${gradeText(x.grades)}</span>${x.tentative?'<span class="tentative-tag">暫定</span>':''}${isPast(x)?'<span class="expired-tag">已結束</span>':''}</div><h2>${x.title}</h2>${x.note?`<p>${x.note}</p>`:''}${eventDetails(x)}<a class="google-calendar-link" href="${googleCalendarUrl(x)}" target="_blank" rel="noopener">＋ 加入 Google 日曆</a></div></article>`).join('')||`<p class="empty-state">${events.length?'目前沒有符合條件的活動。':'尚未加入正式活動，等待學校行事曆資料。'}</p>`}</section></section><p class="source-note">資料來源：學校115學年度第1學期學校簡曆表（表頭標記0618）。另含使用者提供的112至114學年度暑期活動與六年級畢業相關行程日期供備查。115學年度資料涵蓋2026年暑假至2027年2月11日第二學期開學；請以學校最新公告為準。</p>`;
 
 }
 
@@ -91,13 +107,20 @@ function render(resetScroll=false){
     const homeSearch=document.querySelector('#home-search');
     const homeSearchInput=document.querySelector('#home-search-input');
     homeSearchInput.value=state.query;
-    homeSearch.onsubmit=(event)=>{event.preventDefault();state.query=homeSearchInput.value.trim();if(!state.query)return;state.includePast=true;location.hash='#/calendar'};
-    document.querySelectorAll('.countdown-event-link').forEach(link=>link.onclick=()=>{state.academicYear='all';state.semester='all';state.grade='all';state.place='all';state.groups=[];state.categories=[];state.query='';state.includePast=false;state.focusEvent=Number(link.dataset.eventIndex)});
+    homeSearch.onsubmit=(event)=>{event.preventDefault();state.query=homeSearchInput.value.trim();if(!state.query)return;state.view='list';state.month='all';state.includePast=true;location.hash='#/calendar'};
+    document.querySelectorAll('.countdown-event-link').forEach(link=>link.onclick=()=>{state.academicYear='all';state.semester='all';state.grade='all';state.place='all';state.groups=[];state.categories=[];state.query='';state.includePast=false;state.view='list';state.month='all';state.focusEvent=Number(link.dataset.eventIndex)});
   }
   if(path==='/calendar'){
 
-    const year=document.querySelector('#academic-year-filter');year.value=state.academicYear;year.onchange=()=>{state.academicYear=year.value;render()};
-    const semester=document.querySelector('#semester-filter');semester.value=state.semester;semester.onchange=()=>{state.semester=semester.value;render()};
+    document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>{state.view=b.dataset.view;render()});
+    const month=document.querySelector('#month-filter');month.value=state.month;month.onchange=()=>{state.month=month.value;state.includePast=true;render()};
+    document.querySelector('#this-month').onclick=()=>{const entry=events.filter(e=>eventMonths(e).includes(currentMonth())).sort((a,b)=>b.academicYear-a.academicYear)[0];state.academicYear=entry?String(entry.academicYear):'all';state.semester=entry?String(entry.semester):'all';state.month=currentMonth();state.includePast=true;render()};
+    const bindResults=()=>{
+      document.querySelectorAll('[data-month-step]').forEach(b=>b.onclick=()=>{const next=shiftMonth(state.month,Number(b.dataset.monthStep));state.month=next;state.includePast=true;render()});
+      document.querySelectorAll('[data-calendar-event]').forEach(b=>b.onclick=()=>{state.focusEvent=Number(b.dataset.calendarEvent);state.view='list';render()});
+    };bindResults();
+    const year=document.querySelector('#academic-year-filter');year.value=state.academicYear;year.onchange=()=>{state.academicYear=year.value;state.month='all';state.includePast=true;render()};
+    const semester=document.querySelector('#semester-filter');semester.value=state.semester;semester.onchange=()=>{state.semester=semester.value;state.month='all';render()};
     const grade=document.querySelector('#grade-filter');
     const place=document.querySelector('#place-filter');
     const includePast=document.querySelector('#include-past');
@@ -116,7 +139,7 @@ function render(resetScroll=false){
       state.query=searchInput.value;
       const template=document.createElement('template');
       template.innerHTML=calendar();
-      document.querySelector('.timeline').replaceWith(template.content.querySelector('.timeline'));
+      document.querySelector('.calendar-results').replaceWith(template.content.querySelector('.calendar-results'));bindResults();
       document.querySelector('.select-filters strong').textContent=template.content.querySelector('.select-filters strong').textContent;
     };
     let composing=false;
