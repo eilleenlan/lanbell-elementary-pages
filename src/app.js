@@ -1,4 +1,4 @@
-import { events, updatedAt } from './data.js?v=20260917-month-view';
+import { events, updatedAt } from './data.js?v=20260930-activities';
 
 const routes=[['/','首頁','⌂'],['/calendar','行事曆','📅'],['/book-covers','書套尺寸','▤']];
 const categoryGroups={
@@ -9,7 +9,7 @@ const categoryGroups={
   '行政與其他':['註冊/繳費','行政','健康檢查','新生入學','其他'],
 };
 const groupFor=(category)=>Object.entries(categoryGroups).find(([,items])=>items.includes(category))?.[0]||'行政與其他';
-const placeFor=(category)=>category==='校外教學'?'校外':'校內';
+const placeFor=(category)=>['校外教學','畢業旅行'].includes(category)?'校外':'校內';
 const state={view:'list',month:'all',academicYear:'all',semester:'all',grade:'all',place:'all',groups:[],categories:[],query:'',includePast:false,focusEvent:null};
 const root=document.querySelector('#root');
 const dateText=(event)=>{

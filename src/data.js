@@ -1,4 +1,4 @@
-export const updatedAt = '2026年9月12日';
+export const updatedAt = '2026年9月30日';
 export const events = [
   {
     "id": "calendar-115-1-01",
@@ -1117,5 +1117,45 @@ export const events = [
     "source": "使用者整理的115學年第一學期晨間演說表",
     "academicYear": 115,
     "semester": 1
+  },
+  {
+    "id": "arts-grade5-2026-03-31",
+    "start": "2026-03-31",
+    "title": "五年級藝文活動（晚上）",
+    "category": "校外教學",
+    "grades": [
+      5
+    ],
+    "note": "地點：國家音樂廳\n服裝：全套冬季制服（含西裝外套）\n親子音樂會",
+    "academicYear": 114,
+    "semester": 2,
+    "source": "使用者提供（2026-09-30）"
+  },
+  {
+    "id": "arts-grade6-2026-11-13",
+    "start": "2026-11-13",
+    "title": "六年級藝文活動（晚上）",
+    "category": "校外教學",
+    "grades": [
+      6
+    ],
+    "note": "地點：國家音樂廳\n服裝：全套冬季制服（含西裝外套）\n親子音樂會",
+    "academicYear": 115,
+    "semester": 1,
+    "source": "使用者提供（2026-09-30）"
+  },
+  {
+    "id": "graduation-trip-115-2026-12-02",
+    "start": "2026-12-02",
+    "end": "2026-12-04",
+    "title": "畢業旅行",
+    "category": "畢業旅行",
+    "grades": [
+      6
+    ],
+    "note": "畢旅",
+    "academicYear": 115,
+    "semester": 1,
+    "source": "使用者提供（2026-09-30）"
   }
 ];
