@@ -1,4 +1,4 @@
-import { events, updatedAt } from './data.js?v=20261003-overview';
+import { events, updatedAt } from './data.js?v=20261003-aliases';
 
 const routes=[['/','首頁','⌂'],['/overview','學期總覽','▤'],['/calendar','篩選查詢／月曆','📅'],['/book-covers','書套尺寸','▤']];
 const categoryGroups={
@@ -73,14 +73,37 @@ function monthGrid(items){
  return '<div class="month-navigation"><button type="button" data-month-step="-1" aria-label="上個月">‹ 上個月</button><h2>'+monthLabel(state.month)+'</h2><button type="button" data-month-step="1" aria-label="下個月">下個月 ›</button></div><div class="month-scroll"><div class="month-grid">'+[...'日一二三四五六'].map(d=>'<div class="weekday">'+d+'</div>').join('')+cells.join('')+'</div></div>'+(items.length?'':'<p class="empty-state">本月沒有符合篩選條件的行程，可調整篩選或勾選「包含已過期」。</p>');
 }
 
+
+const categoryAliases={
+ '期中考':['期中','期中評量','期中考試','段考'],
+ '期末考':['期末','期末評量','期末考試','段考'],
+ '五年級學力測驗':['學力檢測','學力測驗','五年級學力檢測'],
+ '畢業旅行':['畢旅'],
+ '畢業考':['畢業評量','畢業考試'],
+ '直升考':['直升考試','直升測驗'],
+ '畢業典禮':['畢典'],
+ '暑期活動':['暑輔','暑期輔導','暑期班'],
+ '晨間演說':['晨間演講','晨演','晨間朗讀'],
+ '英文拼字競試':['英文拼字比賽','拼字比賽']
+};
+const normalizeSearch=value=>String(value).normalize('NFKC').toLocaleLowerCase('zh-Hant').replace(/\s+/g,' ').trim();
+const aliasesFor=event=>[
+ ...(categoryAliases[event.category]||[]),...(event.aliases||[]),
+ ...(event.title.includes('學校日')?['家長日','親師座談會']:[]),
+ ...(event.title.includes('結業式')||event.title.includes('休業式')?['結業式','休業式']:[]),
+ ...(event.title.includes('藝文活動')?['音樂會','親子音樂會']:[]),
+ ...(event.title.includes('校車')&&event.title.includes('費')?['校車繳費','校車費','交通費']:[]),
+ ...(event.title.includes('註冊')?['註冊費','註冊繳費','學費']:[])
+];
+
 function calendar(){
   if(state.view==='month'&&state.month==='all'){const months=availableMonths();state.month=months.includes(currentMonth())?currentMonth():(months[0]||currentMonth());}
   const categories=state.groups.length?[...new Set(state.groups.flatMap(group=>categoryGroups[group]))]:Object.values(categoryGroups).flat();
-  const query=state.query.trim().toLocaleLowerCase('zh-Hant');
+  const query=normalizeSearch(state.query);
   const matchesQuery=(x)=>{
     if(!query)return true;
     const dates=[x.start,x.end||''].flatMap(value=>value?[value,value.replaceAll('-','.'),value.replaceAll('-','/')]:[]);
-    const haystack=[x.title,x.note||'',x.category,groupFor(x.category),placeFor(x.category),gradeText(x.grades),...dates].join(' ').toLocaleLowerCase('zh-Hant');
+    const haystack=normalizeSearch([x.title,x.note||'',x.category,groupFor(x.category),placeFor(x.category),gradeText(x.grades),...dates,...aliasesFor(x)].join(' '));
     return haystack.includes(query);
   };
   const filtered=events.filter(x=>(state.academicYear==='all'||x.academicYear===Number(state.academicYear))&&(state.semester==='all'||x.semester===Number(state.semester))&&(state.includePast||!isPast(x))&&(state.grade==='all'||x.grades.length===0||x.grades.includes(Number(state.grade)))&&(state.place==='all'||placeFor(x.category)===state.place)&&(state.groups.length===0||state.groups.includes(groupFor(x.category)))&&(state.categories.length===0||state.categories.includes(x.category))&&matchesQuery(x)&&matchesMonth(x)).slice().sort((a,b)=>a.start.localeCompare(b.start)||a.title.localeCompare(b.title,'zh-Hant'));
@@ -128,7 +151,7 @@ function render(resetScroll=false){
     const actions=document.querySelector('.hero-actions');
     actions.querySelector('.secondary')?.remove();
     document.querySelector('.quick-section')?.remove();
-    actions.insertAdjacentHTML('beforebegin','<form class="calendar-search home-search" id="home-search" role="search"><label for="home-search-input">搜尋所有行程</label><div><input id="home-search-input" type="search" placeholder="例如：校外教學、一年級" autocomplete="off"><button class="search-button" type="submit">搜尋</button></div></form>');
+    actions.insertAdjacentHTML('beforebegin','<form class="calendar-search home-search" id="home-search" role="search"><label for="home-search-input">搜尋所有行程</label><div><input id="home-search-input" type="search" placeholder="例如：畢旅、暑輔、一年級" autocomplete="off"><button class="search-button" type="submit">搜尋</button></div></form>');
     const homeSearch=document.querySelector('#home-search');
     const homeSearchInput=document.querySelector('#home-search-input');
     homeSearchInput.value=state.query;
@@ -161,7 +184,7 @@ function render(resetScroll=false){
     const searchForm=document.createElement('form');
     searchForm.className='calendar-search';
     searchForm.setAttribute('role','search');
-    searchForm.innerHTML='<label for="calendar-search-input">搜尋行事曆</label><div><input id="calendar-search-input" type="search" placeholder="例如：評量、親師座談" autocomplete="off"><button class="search-button" type="submit">搜尋</button><button class="clear-button" type="button">清除搜尋</button></div>';
+    searchForm.innerHTML='<label for="calendar-search-input">搜尋行事曆</label><div><input id="calendar-search-input" type="search" placeholder="例如：段考、畢旅、家長日" autocomplete="off"><button class="search-button" type="submit">搜尋</button><button class="clear-button" type="button">清除搜尋</button></div>';
     document.querySelector('.calendar-tools').before(searchForm);
     const searchInput=searchForm.querySelector('input');
     searchInput.value=state.query;
