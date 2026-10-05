@@ -37,3 +37,5 @@
 共用主要導覽新增「🔤 英文單字練習」，網址 https://eilleenlan.github.io/word-club/，使用一般同分頁連結；手機在既有選單顯示，學段切換列保留原用途。僅本地預覽，未 commit、push 或發布。快取版本更新為 20261005-word-club。JS 語法與四頁三種寬度檢查通過。網頁讀取工具無法開啟練習站，網址採用使用者提供的完整網址。
 
 使用者確認本地預覽後，已授權 commit 並 push 至 main，推送將觸發 GitHub Pages 自動發布。
+
+2026-10-05：依使用者要求，英文單字練習改為另開新分頁（target=_blank、rel=noopener noreferrer），輔助閱讀標籤說明另開新分頁；快取版本更新為 20261005-word-club-new-tab。
