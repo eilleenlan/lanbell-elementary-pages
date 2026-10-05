@@ -18,3 +18,14 @@ a:focus-visible,button:focus-visible{outline:3px solid var(--ink);outline-offset
 
 .site-notice { padding: 16px 24px; text-align: center; color: var(--ink); background: #fff8d6; border-bottom: 1px solid var(--line); font-size: 14px; line-height: 1.8; }
 @media (max-width: 600px) { .site-notice { padding: 12px 20px; font-size: 13px; } }
+
+/* Shared school-level navigation stays outside the sticky header and mobile menu. */
+.school-level-switch { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; padding: 12px max(16px, calc((100vw - var(--max))/2)); background: var(--sunflower-soft); border-bottom: 1px solid var(--line); font-size: 14px; }
+.school-level-label { color: var(--gold); font-size: 13px; font-weight: 700; margin-right: 6px; }
+.school-level-switch > a, .school-level-current { display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 52px; padding: 8px 18px; border: 1px solid var(--line); border-radius: 999px; font-weight: 700; line-height: 1.5; }
+.school-level-switch > a { color: var(--ink); background: var(--surface); text-decoration: none; }
+.school-level-switch > a:hover { background: var(--sage-soft); border-color: var(--sky); }
+.school-level-switch > a:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+.school-level-current { flex-direction: column; gap: 1px; background: var(--sky); border-color: var(--sky); color: white; }
+.school-level-hint { font-size: 11px; font-weight: 500; line-height: 1.4; }
+@media (max-width: 600px) { .school-level-switch { padding: 10px 16px; gap: 6px; } .school-level-label { width: 100%; margin-right: 0; } .school-level-switch > a, .school-level-current { padding: 8px 12px; } .brand { font-size: 16px; gap: 8px; } }
