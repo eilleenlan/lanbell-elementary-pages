@@ -74,3 +74,5 @@
  .overview-day time { font-size:12px; }
  .overview-day > span { font-size:10px; }
 }
+
+#overview-controls { scroll-margin-top: 92px; }
