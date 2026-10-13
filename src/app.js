@@ -1,4 +1,5 @@
-import { events, updatedAt } from './data.js?v=20261006-overview-return';
+import { weekSegments, taipeiToday } from './semester-weeks.js?v=20261013-weeks';
+import { events, updatedAt } from './data.js?v=20261014-arts-midterm';
 
 const routes=[['/','首頁','⌂'],['/overview','學期總覽','▤'],['/calendar','篩選查詢／月曆','📅'],['/book-covers','書套尺寸','▤']];
 const categoryGroups={
@@ -37,6 +38,7 @@ const googleCalendarUrl=(event)=>{
   const params=new URLSearchParams({action:'TEMPLATE',text:event.title,dates:`${calendarDate(event.start)}/${calendarDate(addDays(event.end||event.start,1))}`,details});
   return `https://calendar.google.com/calendar/render?${params}`;
 };
+
 const eventDetails=(event)=>{
   if(event.activitySchedule)return `<details class="event-details activity-details"><summary>查看細節</summary><div class="event-details-body"><section><h3>活動流程</h3><div class="exam-table-wrap"><table><thead><tr><th>時間</th><th>活動項目</th><th>地點</th></tr></thead><tbody>${event.activitySchedule.map(item=>`<tr><td>${escapeHtml(item.time)}</td><td>${escapeHtml(item.activity)}</td><td>${escapeHtml(item.place)}</td></tr>`).join('')}</tbody></table></div></section><section><h3>提醒事項</h3><ul>${(event.activityReminders||[]).map(item=>`<li>${escapeHtml(item)}</li>`).join('')}</ul></section></div></details>`;
 
@@ -123,19 +125,25 @@ function overviewWeekDays(start,items,month,today){
  }).join('')+'</div>';
 }
 
+function overviewWeekHeading(start, year, current) {
+ const segments=weekSegments(start,year);
+ const short=date=>Number(date.slice(5,7))+'/'+Number(date.slice(8));
+ return '<div class="overview-week-labels">'+segments.map(segment=>'<span class="overview-week-label">'+escapeHtml(segment.label)+(segments.length>1?'<span class="overview-week-range">（'+short(segment.start)+(segment.end!==segment.start?'～'+short(segment.end):'')+'）</span>':'')+'</span>').join('')+(current?'<span class="overview-week-current">・本週</span>':'')+'</div>';
+}
+
 function overview(){
  const {year,semester}=overviewState;
  const items=events.filter(e=>e.academicYear===year&&e.semester===semester).sort((a,b)=>a.start.localeCompare(b.start));
  const y=year+1911,start=semester===1?y+'-07-01':(y+1)+'-02-01';let end=semester===1?(y+1)+'-01-31':(y+1)+'-07-31';
  for(const e of items)if((e.end||e.start)>end)end=e.end||e.start;
- const today=addDays(currentMonth()+'-01',new Date().getDate()-1);let month=start.slice(0,7),sections=[],jumps=[];
+ const today=taipeiToday();let month=start.slice(0,7),sections=[],jumps=[];
  while(month<=end.slice(0,7)){
  const first=month+'-01',last=addDays(shiftMonth(month,1)+'-01',-1);let day=addDays(first,-localDate(first).getDay()),rows=[];
  while(day<=last){const stop=addDays(day,6),current=day<=today&&stop>=today&&today.slice(0,7)===month;
  const entries=items.filter(e=>e.start<=stop&&(e.end||e.start)>=day&&e.start<=last&&(e.end||e.start)>=first);
- rows.push('<tr '+(current?'id="overview-current" class="overview-current"':'')+'><th scope="row">'+day.slice(5).replace('-','/')+'～'+stop.slice(5).replace('-','/')+'<small>'+(current?'本週':'日期區間')+'</small>'+overviewWeekDays(day,items,month,today)+'</th><td>'+entries.map(e=>'<details class="overview-event"><summary><span>'+e.start.slice(5).replace('-','/')+(e.end&&e.end!==e.start?'～'+e.end.slice(5).replace('-','/'):'')+'</span><strong>'+escapeHtml(e.title)+(e.tentative?'（暫定）':'')+'</strong><small>'+gradeText(e.grades)+' · '+e.category+'</small></summary><div class="overview-body">'+(e.note?'<p>'+escapeHtml(e.note)+'</p>':'')+eventDetails(e)+'<a href="'+googleCalendarUrl(e)+'" target="_blank" rel="noopener">＋ 加入 Google 日曆</a></div></details>').join('')+(entries.length?'':'<p class="overview-empty">本週未收錄行程</p>')+'</td></tr>');day=addDays(day,7);}
+ rows.push('<tr '+(current?'id="overview-current" class="overview-current"':'')+'><th scope="row">'+overviewWeekHeading(day,year,current)+'<small>'+day.slice(5).replace('-','/')+'～'+stop.slice(5).replace('-','/')+'</small>'+overviewWeekDays(day,items,month,today)+'</th><td>'+entries.map(e=>'<details class="overview-event"><summary><span>'+e.start.slice(5).replace('-','/')+(e.end&&e.end!==e.start?'～'+e.end.slice(5).replace('-','/'):'')+'</span><strong>'+escapeHtml(e.title)+(e.tentative?'（暫定）':'')+'</strong><small>'+gradeText(e.grades)+' · '+e.category+'</small></summary><div class="overview-body">'+(e.note?'<p>'+escapeHtml(e.note)+'</p>':'')+eventDetails(e)+'<a href="'+googleCalendarUrl(e)+'" target="_blank" rel="noopener">＋ 加入 Google 日曆</a></div></details>').join('')+(entries.length?'':'<p class="overview-empty">本週未收錄行程</p>')+'</td></tr>');day=addDays(day,7);}
  jumps.push('<button data-jump="overview-'+month+'" aria-label="'+monthLabel(month)+'">'+Number(month.slice(5))+' 月'+(month.slice(0,4)!==start.slice(0,4)?'（'+month.slice(0,4)+'）':'')+'</button>');sections.push('<section class="overview-month" id="overview-'+month+'"><h2>'+monthLabel(month)+'</h2><table class="overview-table"><thead><tr><th>週次與日期</th><th>當週行程</th></tr></thead><tbody>'+rows.join('')+'</tbody></table></section>');month=shiftMonth(month,1);}
- return head('學期總覽',year+' 學年度'+(semester===1?'上學期':'下學期'),'整學期依月份與每週呈現，包含已過及未來行程。')+'<div class="view-controls" id="overview-controls"><button aria-pressed="true">學期總覽</button><a href="#/calendar" data-overview-mode="list">篩選查詢／清單</a><a href="#/calendar" data-overview-mode="month">月曆</a></div><div class="overview-selectors"><label>學年度 <select id="overview-year">'+[...new Set(events.map(e=>e.academicYear))].sort((a,b)=>b-a).map(v=>'<option value="'+v+'" '+(v===year?'selected':'')+'>'+v+'學年度</option>').join('')+'</select></label><label>學期 <select id="overview-semester"><option value="1" '+(semester===1?'selected':'')+'>上學期</option><option value="2" '+(semester===2?'selected':'')+'>下學期</option></select></label><span>已收錄 '+items.length+' 項行程</span></div><p class="source-note">'+(year<115?'歷史資料僅供參考，非完整學期行事曆。':'')+'依目前已收錄資料呈現；空白週不代表放假。週次尚未逐一核對，先以日期區間呈現。跨週、跨月活動會重複顯示；點選活動可展開備註。</p><div class="overview-jumps"><button type="button" data-jump="overview-controls">回到搜尋／篩選</button><button data-jump="overview-current">跳到本週</button>'+jumps.join('')+'</div><p id="overview-message" role="status"></p>'+sections.join('');
+ return head('學期總覽',year+' 學年度'+(semester===1?'上學期':'下學期'),'整學期依月份與每週呈現，包含已過及未來行程。')+'<div class="view-controls" id="overview-controls"><button aria-pressed="true">學期總覽</button><a href="#/calendar" data-overview-mode="list">篩選查詢／清單</a><a href="#/calendar" data-overview-mode="month">月曆</a></div><div class="overview-selectors"><label>學年度 <select id="overview-year">'+[...new Set(events.map(e=>e.academicYear))].sort((a,b)=>b-a).map(v=>'<option value="'+v+'" '+(v===year?'selected':'')+'>'+v+'學年度</option>').join('')+'</select></label><label>學期 <select id="overview-semester"><option value="1" '+(semester===1?'selected':'')+'>上學期</option><option value="2" '+(semester===2?'selected':'')+'>下學期</option></select></label><span>已收錄 '+items.length+' 項行程</span></div><p class="source-note">'+(year<115?'歷史資料僅供參考，非完整學期行事曆。':'')+'依目前已收錄資料呈現；空白週不代表放假。115學年度上學期週次已核對；下學期僅確認2/11開學，完整週次及未公告假期仍待核對。其他學年度不推算週次。跨週、跨月活動會重複顯示；點選活動可展開備註。</p><div class="overview-jumps"><button type="button" data-jump="overview-controls">回到搜尋／篩選</button><button data-jump="overview-current">跳到本週</button>'+jumps.join('')+'</div><p id="overview-message" role="status"></p>'+sections.join('');
 }
 
 function bookCovers(){return head('115學年度','書套尺寸參考','依年級查看整理表，點選圖片可開啟原圖。')+`<section class="book-cover-grid">${[1,5,6].map(grade=>`<article class="book-cover-card"><h2>${{1:'一',5:'五',6:'六'}[grade]}年級</h2><a href="./assets/book-covers/grade-${grade}.png" target="_blank" rel="noopener"><img src="./assets/book-covers/grade-${grade}.png" alt="115學年${grade}年級書套尺寸參考表" loading="lazy"></a><div class="book-cover-actions"><a href="./assets/book-covers/grade-${grade}.png" target="_blank" rel="noopener">放大查看</a><a href="./assets/book-covers/grade-${grade}.png" download="115菁英班書套尺寸參考--G${grade}.png">下載原檔</a></div></article>`).join('')}</section>`;}

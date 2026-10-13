@@ -1,5 +1,18 @@
-export const updatedAt = '2026年9月30日';
+export const updatedAt = '2026年10月14日';
 export const events = [
+  {
+    "id": "calendar-115-1-arts-midterm",
+    "start": "2026-10-19",
+    "end": "2026-10-30",
+    "title": "藝能科期中考",
+    "category": "期中考",
+    "grades": [],
+    "tentative": true,
+    "note": "按慣例期中考前兩週會開始安排藝能科考試，科目包含體育、珠算、音樂、表藝等等；英語口試、聽力也差不多會安排在這段時間。\n各班考試時間不同，請依老師通知為主。",
+    "source": "使用者提供（2026-10-14）；依慣例整理，實際日期以老師通知為準",
+    "academicYear": 115,
+    "semester": 1
+  },
   {
     "id": "calendar-115-1-01",
     "start": "2026-07-01",

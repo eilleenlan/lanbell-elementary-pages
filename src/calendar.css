@@ -76,3 +76,11 @@
 }
 
 #overview-controls { scroll-margin-top: 92px; }
+
+/* Official semester week labels; keep existing day grid and event layout. */
+.overview-week-labels{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 6px;color:#245f82;line-height:1.6;font-weight:700}
+.overview-week-label{max-width:100%;overflow-wrap:anywhere}
+.overview-week-label + .overview-week-label{flex-basis:100%}
+.overview-week-range{font-size:12px;font-weight:400}
+.overview-week-current{white-space:nowrap}
+@media(max-width:600px){.overview-week-range{display:block}.overview-week-labels{font-size:14px}}
