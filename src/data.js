@@ -962,7 +962,7 @@ export const events = [
   {
     "id": "history-114-2026-04-23-期中考",
     "start": "2026-04-23",
-    "end": "2026-04-25",
+    "end": "2026-04-24",
     "title": "全校期中學力檢測",
     "category": "期中考",
     "grades": [],
