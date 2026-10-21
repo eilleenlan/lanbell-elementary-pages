@@ -1,5 +1,16 @@
-export const updatedAt = '2026年10月14日';
+export const updatedAt = '2026年10月21日';
 export const events = [
+  {
+    "id": "calendar-115-1-flu-vaccination",
+    "start": "2026-10-16",
+    "title": "校園流感疫苗接種",
+    "category": "健康檢查",
+    "grades": [],
+    "note": "校園流感疫苗接種日期：115/10/16（五）。\n\n線上接種意願簽署截止時間：115/9/30（三）17:00。\n\n無論同意或不同意接種，均須完成線上意願簽署；截止時間前可修改意願。\n\n無法在校接種且有接種意願者，可自行至合約醫療院所接種，並向導師登記。\n\n不用帶健保卡。",
+    "source": "使用者提供的學校通知（施工單 002）",
+    "academicYear": 115,
+    "semester": 1
+  },
   {
     "id": "calendar-115-1-arts-midterm",
     "start": "2026-10-19",

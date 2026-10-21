@@ -1,5 +1,5 @@
 import { weekSegments, taipeiToday } from './semester-weeks.js?v=20261013-weeks';
-import { events, updatedAt } from './data.js?v=20261014-arts-midterm';
+import { events, updatedAt } from './data.js?v=20261021-flu';
 
 const routes=[['/','首頁','⌂'],['/overview','學期總覽','▤'],['/calendar','篩選查詢／月曆','📅'],['/book-covers','書套尺寸','▤']];
 const categoryGroups={
