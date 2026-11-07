@@ -1,0 +1,45 @@
+/* Styles are scoped to the new page; calendar and holiday reminder styles stay untouched. */
+.materials-page{color:var(--text);line-height:1.8;min-width:0}
+.materials-page h1,.materials-page h2,.materials-page h3,.materials-page h4{color:var(--ink);line-height:1.45}
+.materials-heading{border-bottom:1px solid var(--line);padding-bottom:24px}
+.materials-heading h1{font:700 clamp(28px,4vw,46px)/1.4 'Noto Serif TC',serif;margin:12px 0}
+.materials-kicker{font-size:13px;color:var(--gold);font-weight:700}
+.materials-tabs,.materials-subjects,.materials-expand-actions{display:flex;flex-wrap:wrap;gap:10px;margin:24px 0}
+.materials-page button{border:1px solid #93b9d0;background:white;color:var(--ink);border-radius:6px;padding:10px 16px;min-height:44px;cursor:pointer;font:inherit}
+.materials-page button[aria-pressed="true"]{background:var(--ink);color:white;border-color:var(--ink)}
+.materials-page button:hover{box-shadow:0 0 0 2px #9cc9df}
+.materials-filters{display:flex;gap:16px;flex-wrap:wrap;background:#e6f5ff;padding:20px;border:1px solid var(--line);border-radius:8px}
+.materials-filters label{display:grid;gap:6px;min-width:145px;color:var(--ink);font-weight:700;font-size:14px}
+.materials-filters select{width:100%;min-height:44px;padding:8px;border:1px solid #93b9d0;background:white;color:var(--text);font:inherit;border-radius:4px}
+.materials-page select:focus-visible,.materials-page summary:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+.materials-content{margin-top:28px;min-width:0}.materials-content>h2{font-size:25px}
+.materials-table-wrap{overflow-x:auto;border:1px solid var(--line);background:white;border-radius:8px}
+.materials-page table{width:100%;border-collapse:collapse;background:white;text-align:left}
+.materials-table-wrap table{min-width:740px}
+.materials-page caption{text-align:left;font-weight:700;padding:16px;color:var(--ink)}
+.materials-page th,.materials-page td{border:1px solid var(--line);padding:14px;vertical-align:top;line-height:1.6}
+.materials-page thead th{background:#e6f5ff;color:var(--ink)}
+.materials-page tbody th{white-space:nowrap;background:#fff8d6}
+.materials-cell-note{display:block;font-size:12px;color:var(--muted);margin-top:6px}
+.materials-changed{color:#a52a28}
+.materials-warning{background:#fff8d6;border-left:4px solid #bb8820;padding:14px 18px;margin:20px 0;color:#674c10;border-radius:4px}
+.materials-warning h4{margin:0 0 8px}.materials-warning ul{margin:0}
+.materials-page summary{cursor:pointer;padding:12px 14px;color:var(--ink);font-weight:700;overflow-wrap:anywhere}
+.materials-catalog{background:white;border:1px solid var(--line);border-radius:8px;margin:14px 0;overflow:hidden}
+.materials-catalog>summary{padding:18px;background:#f1faff}
+.materials-catalog>summary>span{font-size:14px;font-weight:400;margin-left:14px}
+.materials-catalog-body{padding:0 20px 16px}
+.materials-tree{list-style:none;padding:0;margin:10px 0}.materials-tree>li{padding:5px 0;border-top:1px solid #e4edf2}
+.materials-tree>li>span{display:block;padding:6px 12px}
+.materials-tree .materials-tree{border-left:2px solid #bed8e5;margin:0 0 10px 14px;padding-left:12px}
+.materials-muted,.materials-source{color:var(--muted);font-size:14px}.materials-source{margin-top:24px}
+.materials-exam{background:white;border:1px solid var(--line);border-radius:8px;padding:28px;overflow-wrap:anywhere}
+.materials-exam header{border-bottom:1px solid var(--line);padding-bottom:20px}.materials-exam h3{font-size:26px;margin:8px 0}
+.materials-exam h4{margin:24px 0 10px;font-size:18px}.materials-exam section>p{margin:8px 0}
+.materials-badge{font-size:13px;padding:4px 10px;background:#e6f5ff;color:var(--ink);border-radius:4px}
+.materials-scope-text{white-space:pre-line;font-size:17px;line-height:1.9}
+.materials-related{padding-left:20px}.materials-related>li{margin:8px 0}.materials-related details{background:#f6fbfe;border:1px solid var(--line);border-radius:4px}.materials-related details>p{padding:0 14px;font-size:14px}
+.materials-original,.materials-comparison,.materials-timetable{margin-top:22px;border:1px solid var(--line);background:#f8fcff;border-radius:6px;padding:8px}
+.materials-original>p,.materials-comparison>p{margin:12px}.materials-timetable{padding:16px}
+.materials-compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:12px}.materials-compare-grid section{border:1px solid var(--line);padding:12px;background:white}.materials-compare-grid h4{margin:0;font-size:16px}
+@media(max-width:600px){.materials-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px}.materials-tabs button{padding:10px 6px;font-size:14px}.materials-filters{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:14px}.materials-filters label{min-width:0}.materials-exam{padding:16px}.materials-catalog>summary>span{display:block;margin:6px 0 0}.materials-catalog-body{padding:0 12px 12px}.materials-tree .materials-tree{margin-left:6px;padding-left:8px}.materials-compare-grid{grid-template-columns:1fr}.materials-page th,.materials-page td{padding:10px;font-size:14px}.materials-timetable{padding:8px}.materials-subjects{gap:8px}.materials-subjects button{padding:8px 12px}.materials-heading h1{font-size:29px}}

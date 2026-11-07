@@ -1,0 +1,18 @@
+[
+  [
+    "import { weekSegments",
+    "import { materialsPage, bindMaterials } from './materials.js?v=20261105-materials';\nimport { weekSegments"
+  ],
+  [
+    "['/book-covers','書套尺寸','▤']];",
+    "['/book-covers','書套尺寸','▤'],['/materials','教材與考試','▥']];"
+  ],
+  [
+    "'/book-covers':bookCovers};",
+    "'/book-covers':bookCovers,'/materials':materialsPage};"
+  ],
+  [
+    "  if(path==='/'){",
+    "  if(path==='/materials')bindMaterials(root);\n  if(path==='/'){"
+  ]
+]
