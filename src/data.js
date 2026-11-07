@@ -88,7 +88,7 @@ export const events = [
     "title": "課後學藝營及多元分組課程開始上課",
     "category": "學習活動",
     "grades": [],
-    "note": "放學時間：車、家接 15:50；校車 15:40、16:40。",
+    "note": "放學及接送時間依學校通知",
     "source": "學校115學年度第1學期學校簡曆表（表頭標記0618；使用者提供）",
     "academicYear": 115,
     "semester": 1
@@ -989,7 +989,7 @@ export const events = [
     "end": "2026-06-18",
     "title": "全校期末學力檢測",
     "category": "期末考",
-    "grades": [],
+    "grades": [1, 2, 3, 4, 5],
     "note": "第19週。",
     "source": "使用者提供的歷年下學期重要行程（2026-09-08）",
     "academicYear": 114,
@@ -1001,7 +1001,7 @@ export const events = [
     "end": "2025-06-19",
     "title": "全校期末學力檢測",
     "category": "期末考",
-    "grades": [],
+    "grades": [1, 2, 3, 4, 5],
     "note": "第19週。",
     "source": "使用者提供的歷年下學期重要行程（2026-09-08）",
     "academicYear": 113,
@@ -1150,7 +1150,7 @@ export const events = [
     "grades": [
       5
     ],
-    "note": "地點：國家音樂廳\n服裝：全套冬季制服（含西裝外套）\n親子音樂會",
+    "note": "服裝：全套冬季制服（含西裝外套）\n親子音樂會",
     "academicYear": 114,
     "semester": 2,
     "source": "使用者提供（2026-09-30）"
@@ -1163,7 +1163,7 @@ export const events = [
     "grades": [
       6
     ],
-    "note": "地點：國家音樂廳\n服裝：全套冬季制服（含西裝外套）\n親子音樂會",
+    "note": "服裝：全套冬季制服（含西裝外套）\n親子音樂會",
     "academicYear": 115,
     "semester": 1,
     "source": "使用者提供（2026-09-30）"
